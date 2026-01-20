@@ -389,7 +389,8 @@ app.get('/api/file/:filename', (req, res) => {
  * Health check
  */
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Download King Server' })
+  console.log('[HEALTH] Health check requested from:', req.ip || req.connection.remoteAddress)
+  res.json({ status: 'ok', service: 'Download King Server', timestamp: new Date().toISOString() })
 })
 
 /**

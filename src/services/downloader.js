@@ -17,12 +17,21 @@ const CONFIG = {
  */
 async function isLocalBackendAvailable() {
   try {
+    console.log(`[Backend Check] Checking backend at: ${CONFIG.LOCAL_BACKEND}/api/health`)
     const response = await fetch(`${CONFIG.LOCAL_BACKEND}/api/health`, {
       method: 'GET',
       signal: AbortSignal.timeout(3000)
     })
-    return response.ok
-  } catch {
+
+    if (response.ok) {
+      console.log('[Backend Check] ✓ Backend is available')
+      return true
+    } else {
+      console.warn(`[Backend Check] ✗ Backend responded with status: ${response.status}`)
+      return false
+    }
+  } catch (error) {
+    console.error(`[Backend Check] ✗ Backend connection failed:`, error.message)
     return false
   }
 }
