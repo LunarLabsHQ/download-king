@@ -4,7 +4,7 @@
  */
 
 const CONFIG = {
-  LOCAL_BACKEND: 'http://api.downloadking.xyz',
+  LOCAL_BACKEND: 'https://api.downloadking.xyz',
   COBALT_INSTANCES: [
     'https://cobalt-api.meowing.de',
     'https://capi.3kh0.net'

@@ -16,7 +16,11 @@ const PORT = 3001
 
 // Middleware
 app.use(cors({
-  origin: '*', // Allow all origins (restrict in production)
+  origin: [
+    'https://download-king-pegu.vercel.app',
+    'https://api.downloadking.xyz',
+    'https://download-king-eight.vercel.app'
+  ],
   credentials: true,
   exposedHeaders: ['Content-Disposition', 'Content-Length', 'Content-Type']
 }))
@@ -258,7 +262,7 @@ app.post('/api/download', async (req, res) => {
 
     res.json({
       status: 'success',
-      url: `http://api.downloadking.xyz`,
+      url: `https://api.downloadking.xyz${downloadUrl}`,
       filename: downloadedFile
     })
 
