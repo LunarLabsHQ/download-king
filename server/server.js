@@ -258,7 +258,7 @@ app.post('/api/download', async (req, res) => {
 
     res.json({
       status: 'success',
-      url: `http://localhost:${PORT}${downloadUrl}`,
+      url: `http://api.downloadking.xyz`,
       filename: downloadedFile
     })
 
