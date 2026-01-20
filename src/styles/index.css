@@ -483,12 +483,14 @@ button {
 
 /* Download Result Container */
 .download-result-container {
-  display: grid;
-  grid-template-columns: 400px 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
   padding: 24px;
   background: var(--bg-tertiary);
   border-radius: var(--radius-lg);
+  align-items: center;
+  text-align: center;
 }
 
 /* Video Info Card */
@@ -665,6 +667,21 @@ button {
 
 .download-btn-green .btn-icon {
   font-size: 1.1rem;
+}
+
+/* Simple Download Section */
+.simple-download-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.download-btn-green.large {
+  padding: 16px 48px;
+  font-size: 1.125rem;
+  min-width: 200px;
 }
 
 /* Old styles for backward compatibility */
@@ -1282,7 +1299,7 @@ button {
 
 @media (max-width: 968px) {
   .download-result-container {
-    grid-template-columns: 1fr;
+    padding: 20px;
   }
 
   .video-info-card {

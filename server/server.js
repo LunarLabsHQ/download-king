@@ -11,6 +11,11 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// Detect the correct Python command.
+// On many Linux servers only `python3` exists, while on Windows it's usually `python`.
+// You can override this with the PYTHON_CMD environment variable (e.g. PYTHON_CMD=python3).
+const PYTHON_CMD = process.env.PYTHON_CMD || (process.platform === 'win32' ? 'python' : 'python3')
 const app = express()
 const PORT = 3001
 
@@ -64,10 +69,11 @@ setInterval(cleanOldFiles, 10 * 60 * 1000) // Clean every 10 minutes
  */
 function runYtDlp(args, timeout = 120000) {
   return new Promise((resolve, reject) => {
-    console.log(`[yt-dlp] Running: python -m yt_dlp ${args.join(' ')}`)
+    console.log(`[yt-dlp] Using "${PYTHON_CMD}"`)
+    console.log(`[yt-dlp] Running: ${PYTHON_CMD} -m yt_dlp ${args.join(' ')}`)
 
     // Use shell: false and pass arguments properly to avoid path escaping issues
-    const proc = spawn('python', ['-m', 'yt_dlp', ...args], {
+    const proc = spawn(PYTHON_CMD, ['-m', 'yt_dlp', ...args], {
       shell: false,
       windowsHide: true,
       cwd: __dirname
@@ -96,10 +102,16 @@ function runYtDlp(args, timeout = 120000) {
       if (code === 0) {
         resolve(stdout.trim())
       } else {
-        // Extract meaningful error
+        // Extract meaningful error and map common yt-dlp messages
         let errorMsg = stderr || `Exit code ${code}`
+
         if (errorMsg.includes('Sign in to confirm your age')) {
-          errorMsg = 'This video is age-restricted. Please add your YouTube cookies.'
+          errorMsg = 'This video is age-restricted. Please add your YouTube cookies in the app (Manage Cookies).'
+        } else if (
+          errorMsg.includes('Sign in to confirm you\'re not a bot') ||
+          errorMsg.includes('Sign in to confirm you’re not a bot')
+        ) {
+          errorMsg = 'YouTube is asking to confirm you are not a bot. Please add your YouTube cookies in the app (Manage Cookies) and try again.'
         } else if (errorMsg.includes('Private video')) {
           errorMsg = 'This is a private video. You need cookies from an account with access.'
         } else if (errorMsg.includes('Video unavailable')) {
@@ -107,13 +119,22 @@ function runYtDlp(args, timeout = 120000) {
         } else if (errorMsg.includes('is not a valid URL')) {
           errorMsg = 'Invalid URL format.'
         }
+
         reject(new Error(errorMsg))
       }
     })
 
     proc.on('error', (err) => {
       clearTimeout(timer)
-      reject(err)
+      // Give a clearer error if Python itself is not found
+      if (err.code === 'ENOENT') {
+        reject(new Error(
+          `Python executable "${PYTHON_CMD}" not found. ` +
+          `Install Python 3 and yt-dlp on the server, or set PYTHON_CMD to the correct binary.`
+        ))
+      } else {
+        reject(err)
+      }
     })
   })
 }

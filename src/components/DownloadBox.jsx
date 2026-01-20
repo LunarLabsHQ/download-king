@@ -69,7 +69,7 @@ function DownloadBox({ placeholder = "Paste your video link here...", supportedT
       {result && !loading && (
         <div className="result-section active">
           <div className="download-result-container">
-            {/* Left Side - Video Info */}
+            {/* Video Info */}
             <div className="video-info-card">
               <img
                 src={result.thumbnail}
@@ -85,66 +85,22 @@ function DownloadBox({ placeholder = "Paste your video link here...", supportedT
               </div>
             </div>
 
-            {/* Right Side - Download Options */}
-            <div className="download-options-panel">
-              {/* Audio Section */}
-              {result.audioOptions && result.audioOptions.length > 0 && (
-                <div className="download-section">
-                  <div className="section-header">
-                    <span className="section-icon">🎵</span>
-                    <h4 className="section-title">Music</h4>
-                  </div>
-                  <div className="options-list">
-                    {result.audioOptions.map((option, index) => (
-                      <div key={index} className="download-option-row">
-                        <div className="option-info">
-                          <span className="format-badge format-mp3">{option.format}</span>
-                          <span className="option-quality">{option.bitrate}</span>
-                          <span className="option-size">{option.size?.formatted || 'Unknown'}</span>
-                        </div>
-                        <button
-                          className="download-btn-green"
-                          onClick={() => downloadFile(option)}
-                          disabled={loading}
-                        >
-                          <span className="btn-icon">⬇</span>
-                          Download
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Video Section */}
-              {result.videoOptions && result.videoOptions.length > 0 && (
-                <div className="download-section">
-                  <div className="section-header">
-                    <span className="section-icon">▶️</span>
-                    <h4 className="section-title">Video</h4>
-                  </div>
-                  <div className="options-list">
-                    {result.videoOptions.map((option, index) => (
-                      <div key={index} className="download-option-row">
-                        <div className="option-info">
-                          <span className="format-badge format-mp4">{option.format}</span>
-                          <span className="option-quality">{option.label}</span>
-                          <span className="option-size">{option.size?.formatted || 'Unknown'}</span>
-                          {option.fast && <span className="fast-badge">⚡ Fast</span>}
-                        </div>
-                        <button
-                          className="download-btn-green"
-                          onClick={() => downloadFile(option)}
-                          disabled={loading}
-                        >
-                          <span className="btn-icon">⬇</span>
-                          Download
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Simple Download Button */}
+            <div className="simple-download-section">
+              <button
+                className="download-btn-green large"
+                onClick={() => {
+                  // Auto-select best quality video option (first one or primary)
+                  const bestOption = result.videoOptions?.find(opt => opt.primary) || result.videoOptions?.[0] || result.audioOptions?.[0]
+                  if (bestOption) {
+                    downloadFile(bestOption)
+                  }
+                }}
+                disabled={loading}
+              >
+                <span className="btn-icon">⬇</span>
+                Download Video
+              </button>
             </div>
           </div>
         </div>
