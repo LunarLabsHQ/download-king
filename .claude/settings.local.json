@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:instances.cobalt.best)",
+      "WebFetch(domain:video-download-api.com)",
+      "Bash(where:*)",
+      "Bash(pip show:*)",
+      "Bash(node:*)",
+      "Bash(npm --version:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(curl:*)",
+      "Bash(ping:*)",
+      "Bash(python:*)",
+      "Bash(npm run dev)",
+      "Bash(dir)",
+      "Bash(dir:*)",
+      "Bash(copy \"c:\\\\Users\\\\shash\\\\Downloads\\\\pdflogo.png\" \"public\\\\logo.png\")",
+      "Bash(copy \"c:\\\\Users\\\\shash\\\\Downloads\\\\favicon \\(1\\)\" \"public\\\\favicon.ico\")",
+      "Bash(ls:*)"
+    ]
+  }
+}

@@ -1,0 +1,269 @@
+================================================================================
+                     DOWNLOAD KING (REACT) - INSTALLATION GUIDE
+================================================================================
+
+This document explains how to set up and run Download King React application
+locally on your computer for development or personal use.
+
+================================================================================
+                              PREREQUISITES
+================================================================================
+
+Before you begin, make sure you have the following installed:
+
+1. Node.js (version 18.0 or higher)
+   - Download from: https://nodejs.org/
+   - Verify installation: node --version
+
+2. npm (comes with Node.js)
+   - Verify npm: npm --version
+
+3. Python (version 3.8 or higher)
+   - Download from: https://www.python.org/
+   - Verify installation: python --version
+
+4. yt-dlp (YouTube download library)
+   - Install via pip: pip install yt-dlp
+   - Verify installation: python -m yt_dlp --version
+
+================================================================================
+                              QUICK START
+================================================================================
+
+1. Open Terminal/Command Prompt
+
+2. Navigate to the project directory:
+   cd "C:\Users\shash\OneDrive\Desktop\download king"
+
+3. Install frontend dependencies:
+   npm install
+
+4. Install backend dependencies:
+   cd server
+   npm install
+   cd ..
+
+5. Start both servers (recommended):
+   npm start
+
+   This starts both the backend (port 3001) and frontend (port 3000).
+
+6. Open your browser and go to:
+   http://localhost:3000
+
+That's it! The app should now be running locally with full YouTube support.
+
+================================================================================
+                        ALTERNATIVE: RUN SEPARATELY
+================================================================================
+
+If you prefer to run the servers separately:
+
+Terminal 1 - Backend Server:
+   cd server
+   npm start
+
+Terminal 2 - Frontend:
+   npm run dev
+
+The backend MUST be running for YouTube downloads to work reliably.
+
+================================================================================
+                           AVAILABLE SCRIPTS
+================================================================================
+
+npm start
+   - Starts BOTH backend and frontend servers together
+   - Backend runs on http://localhost:3001
+   - Frontend runs on http://localhost:3000
+   - Recommended for development
+
+npm run dev
+   - Starts only the frontend development server
+   - Hot module replacement enabled
+   - Opens at http://localhost:3000
+
+npm run server
+   - Starts only the backend server
+   - Runs on http://localhost:3001
+   - Required for YouTube downloads
+
+npm run build
+   - Creates a production build of the frontend
+   - Output in the "dist" folder
+   - Optimized and minified
+
+npm run preview
+   - Preview the production build locally
+   - Run after "npm run build"
+
+================================================================================
+                           PROJECT STRUCTURE
+================================================================================
+
+download king/
+├── index.html              # Main HTML entry point
+├── package.json            # Dependencies and scripts
+├── vite.config.js          # Vite configuration
+├── installation.txt        # This file
+├── Deployment.txt          # Deployment guide
+├── public/
+│   ├── sitemap.xml         # SEO sitemap
+│   └── robots.txt          # Search engine rules
+├── server/                 # BACKEND SERVER (yt-dlp powered)
+│   ├── package.json        # Server dependencies
+│   ├── server.js           # Express server with yt-dlp
+│   ├── downloads/          # Temporary download storage
+│   └── temp/               # Temporary files
+├── src/
+│   ├── main.jsx            # React entry point
+│   ├── App.jsx             # Main App component
+│   ├── components/
+│   │   ├── Header.jsx      # Navigation header
+│   │   ├── Footer.jsx      # Page footer
+│   │   ├── Toast.jsx       # Toast notifications
+│   │   ├── DownloadBox.jsx # Main download form
+│   │   ├── CookieManager.jsx # Cookie management
+│   │   └── Icons.jsx       # SVG icon components
+│   ├── pages/
+│   │   ├── Home.jsx        # Home page
+│   │   ├── YouTube.jsx     # YouTube downloader
+│   │   ├── Instagram.jsx   # Instagram downloader
+│   │   ├── Twitter.jsx     # Twitter downloader
+│   │   └── About.jsx       # About page
+│   ├── context/
+│   │   ├── ThemeContext.jsx  # Dark/light theme
+│   │   ├── ToastContext.jsx  # Toast notifications
+│   │   └── CookieContext.jsx # Cookie management
+│   ├── hooks/
+│   │   └── useDownloader.js  # Download logic hook
+│   ├── services/
+│   │   └── downloader.js     # API service (local + Cobalt fallback)
+│   ├── utils/
+│   │   └── helpers.js        # Utility functions
+│   └── styles/
+│       └── index.css         # Main stylesheet
+└── node_modules/           # Dependencies
+
+================================================================================
+                              CONFIGURATION
+================================================================================
+
+BACKEND SERVER
+--------------
+The backend server (server/server.js) uses yt-dlp for reliable downloads.
+
+Key settings in server.js:
+   const PORT = 3001           // Backend port
+   const TIMEOUT = 120000      // Download timeout (2 minutes)
+
+Downloaded files are stored temporarily in server/downloads/ and
+automatically cleaned up after 30 minutes.
+
+FRONTEND CONFIGURATION
+----------------------
+The frontend (src/services/downloader.js) is configured to:
+1. First try the local backend (http://localhost:3001)
+2. Fall back to Cobalt API if backend is unavailable
+
+   const CONFIG = {
+       LOCAL_BACKEND: 'http://localhost:3001',
+       COBALT_INSTANCES: [
+           'https://cobalt-api.meowing.de',
+           'https://capi.3kh0.net'
+       ],
+       TIMEOUT: 300000
+   };
+
+PORT CONFIGURATION
+------------------
+Frontend port - edit vite.config.js:
+   server: {
+       port: 3000,  // Change this
+       open: true
+   }
+
+Backend port - edit server/server.js:
+   const PORT = 3001  // Change this
+
+================================================================================
+                             TROUBLESHOOTING
+================================================================================
+
+ISSUE: "npm start" fails
+SOLUTION:
+   - Make sure concurrently is installed: npm install
+   - Try running servers separately (see above)
+
+ISSUE: "yt-dlp not found" or Python errors
+SOLUTION:
+   - Install yt-dlp: pip install yt-dlp
+   - Make sure Python is in PATH
+   - Try: python -m yt_dlp --version
+
+ISSUE: Downloads fail with "Local backend not available"
+SOLUTION:
+   - Make sure the backend server is running
+   - Check terminal for backend errors
+   - Verify port 3001 is not blocked
+
+ISSUE: Port 3000 or 3001 already in use
+SOLUTION:
+   - Change ports in configuration (see above)
+   - Or kill processes using those ports
+
+ISSUE: "npm install" fails
+SOLUTION:
+   - Clear npm cache: npm cache clean --force
+   - Delete node_modules folder and package-lock.json
+   - Run npm install again
+
+ISSUE: Age-restricted videos don't download
+SOLUTION:
+   - Add your YouTube cookies using "Manage Cookies" button
+   - Export cookies from browser using "Get cookies.txt LOCALLY" extension
+   - Paste cookies in the app
+
+ISSUE: Download takes too long / times out
+SOLUTION:
+   - Increase timeout in server/server.js
+   - Check your internet connection
+   - Try a shorter video first
+
+================================================================================
+                           DEVELOPMENT TIPS
+================================================================================
+
+1. Hot Reload
+   - Frontend changes automatically refresh the browser
+   - Backend changes require server restart
+
+2. Backend Logs
+   - The backend logs all yt-dlp operations
+   - Check the terminal for download progress
+
+3. React DevTools
+   - Install React DevTools browser extension for debugging
+   - Chrome: React Developer Tools
+   - Firefox: React Developer Tools
+
+4. Testing Downloads
+   - Use short videos for testing
+   - Check server/downloads/ folder for files
+
+5. Updating yt-dlp
+   - Keep yt-dlp updated: pip install -U yt-dlp
+   - YouTube frequently changes, updates help
+
+================================================================================
+                               SUPPORT
+================================================================================
+
+For issues or questions:
+- Check backend terminal for yt-dlp errors
+- Check browser console for frontend errors (F12 > Console)
+- Update yt-dlp if downloads fail: pip install -U yt-dlp
+- Review React documentation: https://react.dev/
+- Review yt-dlp documentation: https://github.com/yt-dlp/yt-dlp
+
+================================================================================

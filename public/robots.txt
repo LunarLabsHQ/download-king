@@ -1,0 +1,10 @@
+# Download King - robots.txt
+# https://downloadking.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://downloadking.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
