@@ -65,33 +65,19 @@ function DownloadBox({ placeholder = "Paste your video link here...", supportedT
         </div>
       )}
 
-      {/* Result Section */}
+      {/* Result Section - Simple Download Only */}
       {result && !loading && (
         <div className="result-section active">
           <div className="download-result-container">
-            {/* Video Info */}
-            <div className="video-info-card">
-              <img
-                src={result.thumbnail}
-                alt="Video thumbnail"
-                className="video-thumbnail"
-                onError={(e) => { e.target.src = getPlaceholderImage() }}
-              />
-              <div className="video-details">
-                <h3 className="video-title">{result.filename}</h3>
-                {result.duration && (
-                  <p className="video-duration">Duration: {Math.floor(result.duration / 60)}:{String(Math.floor(result.duration % 60)).padStart(2, '0')}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Simple Download Button */}
             <div className="simple-download-section">
               <button
                 className="download-btn-green large"
                 onClick={() => {
-                  // Auto-select best quality video option (first one or primary)
-                  const bestOption = result.videoOptions?.find(opt => opt.primary) || result.videoOptions?.[0] || result.audioOptions?.[0]
+                  const bestOption =
+                    result.videoOptions?.find(opt => opt.primary) ||
+                    result.videoOptions?.[0] ||
+                    result.audioOptions?.[0]
+
                   if (bestOption) {
                     downloadFile(bestOption)
                   }
@@ -99,7 +85,7 @@ function DownloadBox({ placeholder = "Paste your video link here...", supportedT
                 disabled={loading}
               >
                 <span className="btn-icon">⬇</span>
-                Download Video
+                Download
               </button>
             </div>
           </div>
