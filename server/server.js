@@ -421,7 +421,7 @@ app.listen(PORT, () => {
   console.log(`
   ╔═══════════════════════════════════════════════════╗
   ║         Download King Server Running!             ║
-  ║         http://localhost:${PORT}                      ║
+  ║         http://localhost:${PORT}                  ║
   ║                                                   ║
   ║  Endpoints:                                       ║
   ║  POST /api/info     - Get video info              ║
